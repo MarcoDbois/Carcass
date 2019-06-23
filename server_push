@@ -1,0 +1,50 @@
+page wikipedia Push technology : https://en.wikipedia.org/wiki/Push_technology#HTTP_server_push
+Networking programming concepts :
+technique get/pull: exemple HTTP requète initiée par le client (HTTP GET,POST...) puis réponse du serveur.
+technique server push publication asynchrone du serveur (exemple notifications)
+long polling : technique de sondage régulier du client sur le serveur (tech utilisée par AJAX pour simuler un push du serveur)
+  
+WebRTC (Real Time Communication) :
+https://webrtc.org/
+Développer des appli RTC dans les navigateurs, les plateformes mobiles, IoT devices...
+Permet la communication via un certain nombre de protocoles.
+
+Websockets
+WS sécurisés pour un jeu : https://gamedev.stackexchange.com/questions/116213/should-i-use-secure-websockets-for-a-game
+Websockets tutoriel site FullStackPython : https://www.fullstackpython.com/websockets.html
+mdn web docs : https://developer.mozilla.org/fr/docs/Glossaire/WebSockets
+page wikipedia :https://en.wikipedia.org/wiki/WebSocket
+websockets sur site Build New Games : http://buildnewgames.com/websockets/
+
+
+python tornado : 
+Tornado est un framework web et une bibliothèque réseau asynchrone.
+En utilisant des E / S réseau non bloquantes, Tornado peut s’adapter à des dizaines de milliers de connexions ouvertes,
+ ce qui le rend idéal pour les longues interrogations
+("long polling" technque d'interrogation du client pour s'informer des changements sur le serveur ,
+ les WebSockets et autres applications nécessitant une connexion longue durée avec chaque utilisateur.
+user guide : https://www.tornadoweb.org/en/stable/guide.html
+slideshare : 
+- web-backends-development-using-python : https://fr.slideshare.net/ssuser943ebc/web-backends-development-using-python/
+- tornado server : https://fr.slideshare.net/gavinmroy/an-introduction-to-tornado
+- stackoverflow : usage de Tornado https://stackoverflow.com/questions/4212877/when-and-how-to-use-tornado-when-is-it-useless
+
+Apache WebSockets :
+- https://github.com/disconnect/apache-websocket
+
+- extrait site 2011 : Apache Web Server vs Tornado Web Server
+You most be asking yourself, How Tornado Web is different from what Apache Server does, Here is a little break down:
+*Tornado is a platform for developing internet applications, for handling the underlying communications and such. It doesn't "do" anything out of the box--you've got to program it. All Python ;-)
+*Apache is an internet application, of sorts. Upon install, you have a working web server which can serve up static and dynamic web pages. Beyond that, it can be extended to do more than that, if you wish.
+To sum it all up, they are two different things, one is a pure Web server and one is a Web framework with a built-in event driven server..
+Tornado is good for constructing high-end ad-hoc Web services.. 
+
+proxy vs reverse-proxy :
+https://code.i-harness.com/en/q/36d98
+
+Mauvaise solution : https://stackoverflow.com/questions/16962292/infinite-timeout-for-reverse-proxy-in-apache
+Apache mod_proxy : https://httpd.apache.org/docs/2.4/fr/mod/mod_proxy.html
+Apache mod_proxy : webSockets https://httpd.apache.org/docs/2.4/fr/mod/mod_proxy_wstunnel.html
+StackOverFlow apache proxy in Apache : https://stackoverflow.com/questions/16962292/infinite-timeout-for-reverse-proxy-in-apache
+Serverfault Configuring Apache : https://serverfault.com/questions/290121/configuring-apache2-to-proxy-websocket
+
