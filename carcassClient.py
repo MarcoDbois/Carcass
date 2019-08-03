@@ -10,7 +10,8 @@ class Client(ConnectionListener,Carcass):
     def __init__(self, host, port):
         
         self.players = []
-        #serverGame=CarcassServerGame()
+        self.running=False
+        
         Carcass.__init__(self)
         
         self.Connect((host, port))
@@ -19,6 +20,7 @@ class Client(ConnectionListener,Carcass):
     def Loop(self):
         self.Pump()
         connection.Pump()
+        
         self.Events()
         #self.displayCarcassBoard()
     """  
@@ -34,7 +36,7 @@ class Client(ConnectionListener,Carcass):
 
     
     def play(self,pos):
-        connection.Send({"action": "play", "point": pos,"rotation": self.rotTuileToplace,"gameid":self.gameId})
+        connection.Send({"action": "play", "point": pos,"rotation": self.rotTuileToplace,"gameId":self.gameId})
     
     ###############################
     ### Network event callbacks ###
@@ -42,17 +44,22 @@ class Client(ConnectionListener,Carcass):
     # reception de la stack du jeu
     def Network_initial(self, data):
         #self.initGame(data['t0']
-        self.gameId=data["gameid"]
-        self.rank=data["rank"]
+        self.gameId=data["gameId"]
+       
         print("ordre "+str(data['init']))
-        self.initGame(data['init'])
+        #self.running=True
+        self.initGame(data['init'],data["players"])
     # reception d'un coup des adversaires   
     def Network_play(self, data):
         self.game.play(data['point'],data['rotation'])
-        self.rotTuileToplace=0  
+        print("tour ",self.game.tour)
+        self.rotTuileToplace=0
+        self.running=self.game.tour  
         self.displayCarcassBoard()
     
-    
+    def Network_setId(self,data):
+        self.playerId=data['id']
+        self.gameId=data['gameId']
     
     def Network_players(self, data):
         self.playersLabel = str(len(data['players'])) + " players"
@@ -76,6 +83,7 @@ class Client(ConnectionListener,Carcass):
         connection.Close()
     
     def Network_disconnected(self, data):
+        self.crashed=True
         self.statusLabel += " - disconnected"
 
 if __name__ == '__main__':

@@ -26,20 +26,29 @@ tuiles=[t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15]
 
 
 class CarcassGame():   
-    def __init__(self,stack):
+    def __init__(self,stack,players,playerId,gameId,nbPlayers=3):
         
+        self.nbPlayers=nbPlayers
+        self.playerId=playerId
+        print(playerId)
+        self.gameId=gameId
+        print(gameId)
+        self.players=players
+        print(players)
         
         self.tourNum=1
-        self.tour=True
+        #self.tour=True if players.index(playerId)==0 else False
+        self.tour=self.myTurn()
         self.stack=[t for o in stack for t in tuiles if t.ref==o] 
-        print(self.stack)
+        
         square0=Square(0,0,t0,0)        
         self.squares=[square0]
         self.clickablePlaces=[x[1] for x in square0.voisins()]
     
        
-            
-        
+    def myTurn(self):
+        return True if self.tourNum % self.nbPlayers==(self.players.index(self.playerId)+1) % self.nbPlayers else False        
+    
         
     def tuileToPlace(self):
         return self.stack[self.tourNum-1]
@@ -62,6 +71,8 @@ class CarcassGame():
             self.clickablePlaces.extend([voisin[1] for voisin in voisins])
             if self.tourNum<len(self.stack):
                 self.tourNum+=1
+                self.tour=self.myTurn()
+                print(self.tour)
             else:
                 self.tourNum=0
                 

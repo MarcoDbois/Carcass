@@ -3,10 +3,11 @@ from __future__ import print_function
 import sys
 from time import sleep, localtime
 from random import randint,sample
-from weakref import WeakKeyDictionary
+
 
 from PodSixNet.Server import Server
 from PodSixNet.Channel import Channel
+
 
 
 class ServerChannel(Channel):
@@ -18,8 +19,7 @@ class ServerChannel(Channel):
         Channel.__init__(self, *args, **kwargs)
         self.id = str(self._server.nextId())
         intid = int(self.id)
-        self.color = [(intid + 1) % 3 * 84, (intid + 2) % 3 * 84, (intid + 3) % 3 * 84] #tuple([randint(0, 127) for r in range(3)])
-        self.lines = []
+       
     
     def PassOn(self, data):
         # pass on what we received to all connected clients
@@ -53,7 +53,7 @@ class CarcassServer(Server):
         self.games = []
         self.queue = None
         self.currentIndex=0
-        self.players = WeakKeyDictionary()
+        self.players = []
         print('Server launched')
    
     def nextId(self):
@@ -64,15 +64,17 @@ class CarcassServer(Server):
     def Connected(self, channel,addr):
         #self.AddPlayer(channel)
         print('new connection:', channel, addr)
+        channel.gameId= self.currentIndex if self.queue!=None else self.currentIndex+1
+        channel.Send({"action": "setId", "id": channel.id,"gameId":channel.gameId})
+        
         if self.queue==None :
             self.currentIndex+=1
-            channel.gameid=self.currentIndex
-            
             self.queue=Game(self.currentIndex)
             self.queue.addPlayer(channel)
-            
-            
+         
         else:
+            print("hi")
+            
             l=len(self.queue.players)
             
             if l<self.queue.nbPlayers-1:                
@@ -81,12 +83,13 @@ class CarcassServer(Server):
                 
             if l==self.queue.nbPlayers-1:
                 self.queue.addPlayer(channel)
-                print(self.queue.players)
+                players=[p.id for p in self.queue.players]
+                print(players)
                 for p in self.queue.players:
                     
-                    index=self.queue.players.index(p)
+                    #index=self.queue.players.index(p)
                     
-                    p.Send({"action": "initial", "init": self.queue.stack, "rank": index, "gameid":self.queue.gameid})
+                    p.Send({"action": "initial", "init": self.queue.stack, "players": players, "gameId":self.queue.gameId})
                 self.games.append(self.queue) 
                 self.queue=None   
             
@@ -118,8 +121,8 @@ class CarcassServer(Server):
         
     def SendToGamePlayer(self, data):
         senderId=data['id']
-        gameId=data['gameid']
-        [p.Send(data) for g in self.games for p in g.players if g.gameid==gameId and p.id!=senderId]
+        gameId=data['gameId']
+        [p.Send(data) for g in self.games for p in g.players if g.gameId==gameId and p.id!=senderId]
 
 class Game:
     def __init__(self, currentIndex,nbPlayers=3):
@@ -130,8 +133,8 @@ class Game:
         #initialize the players including the one who started the game
         self.players=[]
         
-        #gameid of game
-        self.gameid=currentIndex  
+        #gameId of game
+        self.gameId=currentIndex  
         
         self.nbPlayers=nbPlayers 
     

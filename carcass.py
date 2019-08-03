@@ -21,7 +21,7 @@ class Carcass():
         pass
         
         posTuileToPlace=((Params.MENU_WIDTH.value-Params.SQUARE_DIM.value)/2,(Params.WINDOW_HEIGHT.value-Params.SQUARE_DIM.value)/2)
-        
+        #self.running=False
         self.rectTuileToPlace=pygame.Rect(posTuileToPlace[0],posTuileToPlace[1],Params.SQUARE_DIM.value,Params.SQUARE_DIM.value)
         self.crashed= False
         self.clock=pygame.time.Clock()
@@ -30,10 +30,13 @@ class Carcass():
            
             
     
-    def initGame(self,stack):
-        self.game=CarcassGame(stack)
+    def initGame(self,stack,players):
+        
+        self.game=CarcassGame(stack,players,self.playerId,self.gameId)
         self.rotTuileToplace=0
-            
+        self.running=self.game.tour
+        print(self.running)
+          
         self.displayCarcassBoard()
             
         self.displayTuileToPlace()
@@ -44,10 +47,12 @@ class Carcass():
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
                 self.crashed=True
-            if event.type== pygame.MOUSEBUTTONDOWN :
+            if event.type== pygame.MOUSEBUTTONDOWN:
                     print(event)
+           
+                
             #
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and self.game.tourNum<=len(self.game.stack):
+            if self.running==True and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and self.game.tourNum<=len(self.game.stack):
                 
                 if self.rectTuileToPlace.collidepoint(event.pos[0],event.pos[1]):
                     self.rotTuileToplace+=1
@@ -66,6 +71,9 @@ class Carcass():
                                 
                         if placable: 
                             self.play(pos)
+                            
+                            self.running=self.game.tour
+                            print("running ",self.running)
                             self.rotTuileToplace=0  
                             self.displayCarcassBoard()  
                             
