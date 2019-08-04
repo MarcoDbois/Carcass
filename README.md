@@ -1,9 +1,9 @@
 # Carcass
 Projet : Créer une version en ligne du jeu Carcassonne 2 : chasseurs et cueilleurs
 
-Seb, le fichier que nous avons regardé ensemble mercredi 01/08 est carcass_08001
+Seb, le fichier que nous avons regardé ensemble mercredi 01/08 est conservé sous le nom carcass_08001
 
-La nouvelle version intègre beaucoup de changement:
+La nouvelle version intègre beaucoup de changements:
 
 - un fichier par classe python
 - un répertoire pour le client
