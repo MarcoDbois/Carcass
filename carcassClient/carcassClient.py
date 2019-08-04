@@ -52,6 +52,7 @@ class Client(ConnectionListener,Carcass):
     # reception d'un coup des adversaires   
     def Network_play(self, data):
         self.game.play(data['point'],data['rotation'])
+        
         print("tour ",self.game.tour)
         self.rotTuileToplace=0
         self.running=self.game.tour  

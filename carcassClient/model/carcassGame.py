@@ -41,7 +41,7 @@ class CarcassGame():
         
         square0=Square(0,0,t0,0)        
         self.squares=[square0]
-        self.clickablePlaces=[x[1] for x in square0.voisins()]
+        self.clickablePlaces=[x for x in square0.voisins()]
     
        
     def myTurn(self):
@@ -53,7 +53,7 @@ class CarcassGame():
     
     def play(self,pos,rotation):
         newSquare=Square(pos[0],pos[1],self.tuileToPlace(),rotation)      
-        voisins=[x for x in newSquare.voisins() if x[1] not in self.clickablePlaces]                      
+        voisins=[(i,x) for i,x in enumerate(newSquare.voisins()) if x not in self.clickablePlaces]                      
         potentialNeighbours=[(sq,x[0]) for sq in self.squares for x in voisins if sq.position==x[1] ]
                         
         placable=True
@@ -67,14 +67,17 @@ class CarcassGame():
             self.squares.append(newSquare)
             self.clickablePlaces.remove(newSquare.position)
             self.clickablePlaces.extend([voisin[1] for voisin in voisins])
-            if self.tourNum<len(self.stack):
+            self.nextTurn()
+        
+        return placable
+    
+    def nextTurn(self):
+        if self.tourNum<len(self.stack):
                 self.tourNum+=1
                 self.tour=self.myTurn()
                 print(self.tour)
-            else:
-                self.tourNum=0
+        else:
+            self.tourNum=0
                 
-        
-        return placable
     
  

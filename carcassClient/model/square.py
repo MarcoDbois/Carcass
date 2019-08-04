@@ -25,6 +25,6 @@ class Square() :
                 if direction==1:
                     deltaX=1 
                 else: deltaX=-1
-            voisins.append((direction, (x+deltaX, y+deltaY)))
+            voisins.append((x+deltaX, y+deltaY))
         return voisins  
  

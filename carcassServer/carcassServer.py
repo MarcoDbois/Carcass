@@ -26,7 +26,8 @@ class ServerChannel(Channel):
     def PassOn(self, data):
         # pass on what we received to all connected clients
         data.update({"id": self.id})
-        self._server.SendToGamePlayer(data)
+        
+        self._server.SendToGamePlayers(data)
     """
     def Close(self):
         self._server.DelPlayer(self)
@@ -40,6 +41,7 @@ class ServerChannel(Channel):
     
     def Network_play(self, data):
         print(data)
+        self._server.updateGameData(data)
         self.PassOn(data)
 """
     def Network_drawpoint(self, data):
@@ -68,7 +70,9 @@ class CarcassServer(Server):
         print('new connection:', channel, addr)
         channel.gameId= self.currentIndex if self.queue!=None else self.currentIndex+1
         channel.Send({"action": "setId", "id": channel.id,"gameId":channel.gameId})
+        self.addPlayer(channel)
         
+    def  addPlayer(self,channel): 
         if self.queue==None :
             self.currentIndex+=1
             self.queue=Game(self.currentIndex)
@@ -87,12 +91,11 @@ class CarcassServer(Server):
                 self.queue.addPlayer(channel)
                 players=[p.id for p in self.queue.players]
                 print(players)
+                
                 for p in self.queue.players:
-                    
-                    #index=self.queue.players.index(p)
-                    
                     p.Send({"action": "initial", "init": self.queue.stack, "players": players, "gameId":self.queue.gameId})
                 self.games.append(self.queue) 
+                self.queue.printGame()
                 self.queue=None   
             
             
@@ -105,11 +108,23 @@ class CarcassServer(Server):
             self.Pump()
             sleep(0.0001)
     
-    def SendToGamePlayer(self, data):
+    def SendToGamePlayers(self, data):
         senderId=data['id']
         gameId=data['gameId']
         [p.Send(data) for g in self.games for p in g.players if g.gameId==gameId and p.id!=senderId]
-        
+    
+    def updateGameData(self,data):
+        gameId=data['gameId']
+        point=data['point']
+        rotation=data['rotation']
+        for g in self.games:
+            if g.gameId==gameId:
+                tuileId=g.stack[g.turn-1]
+                g.playedSquares.append({"turnId":g.turn,"playerId":g.playerTurn().id,"tuile":tuileId,"point":point,"rotation":rotation})
+                g.turn+=1
+                g.printGame()
+        pass
+         
 """
     def AddPlayer(self, player):
         print("New Player" + str(player.addr))

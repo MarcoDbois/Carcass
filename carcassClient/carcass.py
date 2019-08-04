@@ -7,12 +7,15 @@ from params import Params
 
 pygame.init()
 gameDisplay = pygame.display.set_mode((Params.WINDOW_WIDTH.value, Params.WINDOW_HEIGHT.value))
-
+BACKGROUND_GAME_COLOR=(255, 230, 128)
+BACKGROUND_MENU_COLOR=(102, 153, 153)
+pygame.display.set_caption("Carcass!!!!!")
 #        Chargement et collage du fond
-fond = pygame.image.load(Params.PNG_DIR.value+Params.BACKGROUND.value).convert()
-gameDisplay.blit(fond, (Params.MENU_WIDTH.value,0))
-menu=pygame.image.load(Params.PNG_DIR.value+Params.P_LATERAL.value).convert()
-gameDisplay.blit(menu, (0,0))
+rectMenu = pygame.Rect(0,0,Params.MENU_WIDTH.value,Params.WINDOW_HEIGHT.value)
+gameDisplay.fill(BACKGROUND_MENU_COLOR,rectMenu)
+rectGame=pygame.Rect(Params.MENU_WIDTH.value,0,Params.WINDOW_HEIGHT.value,Params.WINDOW_HEIGHT.value)
+gameDisplay.fill(BACKGROUND_GAME_COLOR,rectGame)
+
          
 class Carcass():
       
@@ -71,6 +74,7 @@ class Carcass():
                                 
                         if placable: 
                             self.play(pos)
+                            
                             
                             self.running=self.game.tour
                             print("running ",self.running)
