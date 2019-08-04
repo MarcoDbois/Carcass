@@ -5,11 +5,14 @@ Seb, le fichier que nous avons regardé ensemble mercredi 01/08 est carcass_0800
 
 La nouvelle version intègre beaucoup de changement:
 
-- un fichier par classe python: 
+- un fichier par classe python
 - un répertoire pour le client
 - un répertoire pour le serveur
 - les classes Tuile, Square et CarcassGame constituent la modélisation du jeu et sont regroupées dans le répertoire carcassClient/model
+- une partie coté serveur est représentée par la classe serverGame
+- Les clients sont représentés coté serveur par la classe ServerChannel 
   
   Pour jouer :
    lancer le serveur : python carcassServer/carcassServer.py localhost:1200 (par exemple)
-   lancer trois clients : python carcassClient/carcassClient.py localhost:1200 (le nombre de joueurs pour une partie est fixé à trois)
+   lancer trois clients : python carcassClient/carcassClient.py localhost:1200 
+   (le nombre de joueurs pour une partie est fixé à trois pour l'instant)
