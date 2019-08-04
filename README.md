@@ -10,6 +10,7 @@ La nouvelle version intègre beaucoup de changements:
 - un répertoire pour le serveur
 - les classes Tuile, Square et CarcassGame constituent la modélisation du jeu et sont regroupées dans le répertoire carcassClient/model
 - une partie coté serveur est représentée par la classe serverGame
+- l'interface graphique (très pauvre) est représentée par carcass.py (classe chargée de l'affichage)
 - Les clients sont représentés coté serveur par la classe ServerChannel 
   
 - Pour jouer :
