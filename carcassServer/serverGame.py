@@ -23,8 +23,8 @@ class Game:
     def printGame(self):
         print("Game ",str(self.gameId),"\nplayers: ",[p.id for p in self.players],"\nstack: ",self.stack,'\n tuiles jouées :',self.playedSquares)
        
-        if self.turn<len(self.stack):
-            print( "\nprochain tour: ",self.turn)
+        if self.turn<=len(self.stack):
+            print( "prochain tour: ",self.turn)
         else:
             print("game over")
             

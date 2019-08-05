@@ -45,14 +45,13 @@ class CarcassServer(Server):
         else:
             print("hi")
             
-            l=len(self.queue.players)
             
-            if l<self.queue.nbPlayers-1:                
-                self.queue.addPlayer(channel)
-                print(self.queue.players)
+            self.queue.addPlayer(channel)
+            l=len(self.queue.players)
+            print(self.queue.players)
                 
-            if l==self.queue.nbPlayers-1:
-                self.queue.addPlayer(channel)
+            if l==self.queue.nbPlayers:
+               
                 players=[p.id for p in self.queue.players]
                 print(players)
                 
@@ -86,8 +85,7 @@ class CarcassServer(Server):
                 tuileId=g.stack[g.turn-1]
                 g.playedSquares.append({"turnId":g.turn,"playerId":g.playerTurn().id,"tuile":tuileId,"point":point,"rotation":rotation})
                     
-                if g.turn<len(g.stack):
-                    g.turn+=1
+                g.turn+=1
                 if g.turn==len(g.stack):
                     for p in g.players:
                         p.Send({"action":"endGame","gameId":g.gameId})

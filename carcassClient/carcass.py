@@ -85,6 +85,7 @@ class Carcass():
         print([pos for pos in self.game.clickablePlaces])
         
         displayBackground()
+        
         for square in self.game.squares:
             rect=self.calculRectTuile(square.position)
             self.displayTuile(square.tuile.jpg,rect,square.rot)
@@ -92,8 +93,8 @@ class Carcass():
         for place in self.game.clickablePlaces:            
             rect=self.calculRectTuile(place)
             self.displayTuile(Params.CLICKABLE.value,rect,0)
-        if self.game.tourNum<=len(self.game.stack):
             
+        if self.game.tourNum<=len(self.game.stack):
             self.displayTuileToPlace()                       
                                  
         print("\n")
