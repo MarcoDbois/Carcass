@@ -43,7 +43,9 @@ class CarcassGame():
         self.squares=[square0]
         self.clickablePlaces=[x for x in square0.voisins()]
     
-       
+    
+    def tuileDep(self):
+        return t0   
     def myTurn(self):
         return True if self.tourNum % self.nbPlayers==(self.players.index(self.playerId)+1) % self.nbPlayers else False        
     
@@ -72,12 +74,10 @@ class CarcassGame():
         return placable
     
     def nextTurn(self):
-        if self.tourNum<len(self.stack):
-                self.tourNum+=1
-                self.tour=self.myTurn()
-                print(self.tour)
-        else:
-            self.tourNum=0
+        self.tourNum+=1
+        self.tour=self.myTurn()
+        #else:
+        #    self.tourNum=0
                 
     
  

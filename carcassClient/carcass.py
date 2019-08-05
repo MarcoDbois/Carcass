@@ -1,5 +1,5 @@
 import pygame
-
+import copy
 from model.tuile import Tuile
 from model.carcassGame import CarcassGame
 from params import Params
@@ -11,10 +11,13 @@ BACKGROUND_GAME_COLOR=(255, 230, 128)
 BACKGROUND_MENU_COLOR=(102, 153, 153)
 pygame.display.set_caption("Carcass!!!!!")
 #        Chargement et collage du fond
-rectMenu = pygame.Rect(0,0,Params.MENU_WIDTH.value,Params.WINDOW_HEIGHT.value)
-gameDisplay.fill(BACKGROUND_MENU_COLOR,rectMenu)
-rectGame=pygame.Rect(Params.MENU_WIDTH.value,0,Params.WINDOW_HEIGHT.value,Params.WINDOW_HEIGHT.value)
-gameDisplay.fill(BACKGROUND_GAME_COLOR,rectGame)
+#displayBackground()
+
+def displayBackground():
+    rectMenu = pygame.Rect(0,0,Params.MENU_WIDTH.value,Params.WINDOW_HEIGHT.value)
+    gameDisplay.fill(BACKGROUND_MENU_COLOR,rectMenu)
+    rectGame=pygame.Rect(Params.MENU_WIDTH.value,0,Params.WINDOW_HEIGHT.value,Params.WINDOW_HEIGHT.value)
+    gameDisplay.fill(BACKGROUND_GAME_COLOR,rectGame)
 
          
 class Carcass():
@@ -22,7 +25,8 @@ class Carcass():
     def __init__(self):
         
         pass
-        
+        displayBackground()
+        self.clickedPosition=None
         posTuileToPlace=((Params.MENU_WIDTH.value-Params.SQUARE_DIM.value)/2,(Params.WINDOW_HEIGHT.value-Params.SQUARE_DIM.value)/2)
         #self.running=False
         self.rectTuileToPlace=pygame.Rect(posTuileToPlace[0],posTuileToPlace[1],Params.SQUARE_DIM.value,Params.SQUARE_DIM.value)
@@ -39,12 +43,17 @@ class Carcass():
         self.rotTuileToplace=0
         self.running=self.game.tour
         print(self.running)
-          
-        self.displayCarcassBoard()
+        
+        self.displayT0()
             
         self.displayTuileToPlace()
         
-           
+    def displayT0(self):
+        rectDep=self.calculRectTuile((0,0))
+        img=self.game.tuileDep().jpg
+        
+        self.displayTuile(img,rectDep,0)
+               
     def Events(self):
         
         for event in pygame.event.get():
@@ -53,50 +62,29 @@ class Carcass():
             if event.type== pygame.MOUSEBUTTONDOWN:
                     print(event)
            
-                
-            #
-            if self.running==True and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and self.game.tourNum<=len(self.game.stack):
+            if self.running==True and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 
                 if self.rectTuileToPlace.collidepoint(event.pos[0],event.pos[1]):
                     self.rotTuileToplace+=1
                     self.displayTuileToPlace()
-                    
                 else:
-                
                     try: pos=self.inClickableRects(event.pos[0], event.pos[1])
                     except NameError: pos = None
-                    print(pos)
-                
-                    if pos is not None:   
-                        
-                        placable=self.game.play(pos,self.rotTuileToplace)
-                        
-                                
-                        if placable: 
-                            self.play(pos)
-                            
-                            
-                            self.running=self.game.tour
-                            print("running ",self.running)
-                            self.rotTuileToplace=0  
-                            self.displayCarcassBoard()  
-                            
-                            
-                            
-                                
-                        
-                    
+                    if pos is not None:        
+                        self.play(pos)
+                       
         pygame.display.flip()
         self.clock.tick(60)
             
 
-    def displayCarcassBoard(self):
+    def displayMove(self,pos):
         
         print(str(len(self.game.squares))+" squares")
         print([sq.to_str() for sq in self.game.squares])
         print(str(len(self.game.clickablePlaces))+" places")
         print([pos for pos in self.game.clickablePlaces])
         
+        displayBackground()
         for square in self.game.squares:
             rect=self.calculRectTuile(square.position)
             self.displayTuile(square.tuile.jpg,rect,square.rot)
@@ -104,13 +92,11 @@ class Carcass():
         for place in self.game.clickablePlaces:            
             rect=self.calculRectTuile(place)
             self.displayTuile(Params.CLICKABLE.value,rect,0)
-        if self.game.tourNum==0:
-            self.displayEndGame()
-                                
-        else:
-            self.displayTuileToPlace()
+        if self.game.tourNum<=len(self.game.stack):
+            
+            self.displayTuileToPlace()                       
                                  
-            print("\n")
+        print("\n")
             
             
                             

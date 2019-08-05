@@ -9,45 +9,9 @@ from serverGame import Game
 
 from PodSixNet.Server import Server
 from PodSixNet.Channel import Channel
+from serverChannel import ServerChannel
 
 
-
-class ServerChannel(Channel):
-    """
-    This is the server representation of a single connected client.
-    """
-    
-    def __init__(self, *args, **kwargs):
-        Channel.__init__(self, *args, **kwargs)
-        self.id = str(self._server.nextId())
-        intid = int(self.id)
-       
-    
-    def PassOn(self, data):
-        # pass on what we received to all connected clients
-        data.update({"id": self.id})
-        
-        self._server.SendToGamePlayers(data)
-    """
-    def Close(self):
-        self._server.DelPlayer(self)
-    """
-    ##################################
-    ### Network specific callbacks ###
-    ##################################
-    
-    def Network(self, data):
-        print(data["action"])
-    
-    def Network_play(self, data):
-        print(data)
-        self._server.updateGameData(data)
-        self.PassOn(data)
-"""
-    def Network_drawpoint(self, data):
-        self.lines[-1].append(data['point'])
-        self.PassOn(data)
-"""
 class CarcassServer(Server):
     channelClass = ServerChannel
         
@@ -111,9 +75,9 @@ class CarcassServer(Server):
     def SendToGamePlayers(self, data):
         senderId=data['id']
         gameId=data['gameId']
-        [p.Send(data) for g in self.games for p in g.players if g.gameId==gameId and p.id!=senderId]
+        [p.Send(data) for g in self.games for p in g.players if g.gameId==gameId ]
     
-    def updateGameData(self,data):
+    def updateGameMove(self,data):
         gameId=data['gameId']
         point=data['point']
         rotation=data['rotation']
@@ -121,7 +85,12 @@ class CarcassServer(Server):
             if g.gameId==gameId:
                 tuileId=g.stack[g.turn-1]
                 g.playedSquares.append({"turnId":g.turn,"playerId":g.playerTurn().id,"tuile":tuileId,"point":point,"rotation":rotation})
-                g.turn+=1
+                    
+                if g.turn<len(g.stack):
+                    g.turn+=1
+                if g.turn==len(g.stack):
+                    for p in g.players:
+                        p.Send({"action":"endGame","gameId":g.gameId})
                 g.printGame()
         pass
          

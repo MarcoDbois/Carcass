@@ -5,7 +5,7 @@ class Game:
         # numéro du tour
         self.turn = 1
         # stack de la partie
-        self.stack=sample([i for i in range(1,17)],16)
+        self.stack=sample([i for i in range(1,17)],4)
         #initialize the players including the one who started the game
         self.players=[]
         self.playedSquares=[]
@@ -17,9 +17,17 @@ class Game:
     def addPlayer(self,player):
         self.players.append(player)
     
-    def printGame(self):
-        print("Game ",str(self.gameId),"\nplayers: ",[p.id for p in self.players],"\nstack: ",self.stack,'\n tuiles jouées :',self.playedSquares, "\nprochain tour: ",self.turn)
+    def nextTurn(self):
+        self.turn+=1
     
+    def printGame(self):
+        print("Game ",str(self.gameId),"\nplayers: ",[p.id for p in self.players],"\nstack: ",self.stack,'\n tuiles jouées :',self.playedSquares)
+       
+        if self.turn<len(self.stack):
+            print( "\nprochain tour: ",self.turn)
+        else:
+            print("game over")
+            
     def playerTurn(self):
         
         return self.players[self.turn%len(self.players)-1]

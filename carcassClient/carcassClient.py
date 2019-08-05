@@ -22,16 +22,12 @@ class Client(ConnectionListener,Carcass):
         connection.Pump()
         
         self.Events()
-        #self.displayCarcassBoard()
-    """  
-        if "connecting" in self.statusLabel:
-            self.statusLabel = "connecting" + "".join(["." for s in range(int(self.frame / 30) % 4)])
-    """
+        
+    
     #######################    
     ### Event callbacks ###
     #######################
-    #def PenDraw(self, e):
-    #    connection.Send({"action": "draw", "point": e.pos})
+    
     
 
     
@@ -47,25 +43,30 @@ class Client(ConnectionListener,Carcass):
         self.gameId=data["gameId"]
        
         print("ordre "+str(data['init']))
-        #self.running=True
+        
         self.initGame(data['init'],data["players"])
+        
     # reception d'un coup des adversaires   
     def Network_play(self, data):
-        self.game.play(data['point'],data['rotation'])
         
-        print("tour ",self.game.tour)
-        self.rotTuileToplace=0
-        self.running=self.game.tour  
-        self.displayCarcassBoard()
-    
+        self.game.play(data['point'],data['rotation'])
+        self.displayMove(data['point']) 
+        
+        if self.game.tourNum<=len(self.game.stack):
+            
+            self.rotTuileToplace=0
+            self.running=self.game.tour 
+            
+        else:
+            self.running=False
+            self.displayEndGame()
+        
     def Network_setId(self,data):
         self.playerId=data['id']
         self.gameId=data['gameId']
     
     def Network_players(self, data):
         self.playersLabel = str(len(data['players'])) + " players"
-        mark = []
-        
         self.players=data['players']
         
     
