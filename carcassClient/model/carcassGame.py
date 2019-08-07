@@ -3,6 +3,7 @@ from model.square import Square
 from model.cardZone import CardZone
 
 
+
 t0=Tuile(0,"tuile0.png","PFFR",[[1,2]])
                 
 t1=Tuile(1,"tuile1.png","RRPR")
@@ -88,10 +89,13 @@ class CarcassGame():
                 self.woods[a].append(b)
                 self.woods[b].append(a)
                 
+             
             
             for k,v in self.woods.items():
                 val=[va.to_str() for va in v]
                 print(k.to_str(),val)
+            self.connexions=self.allConnexe()
+            print(self.connexions)
             self.squares.append(newSquare)
             self.clickablePlaces.remove(newSquare.position)
             self.clickablePlaces.extend([voisin[1] for voisin in voisins])
@@ -99,6 +103,23 @@ class CarcassGame():
         
         return placable
     
+    def connexeWood(self,node,mark=[]):
+        mark.append(node)
+        
+        for n in self.woods[node]:
+            if n not in mark:
+                self.connexeWood(n,mark)
+        return mark
+    def allConnexe(self):
+        connexions=[]
+        conn=[]
+        for n in self.woods:
+            #print(conn)
+            if n not in conn:
+                cx=self.connexeWood(n,[])
+                conn.extend(cx)
+                connexions.append(self.connexeWood(n, []))  
+        return connexions    
     def nextTurn(self):
         self.tourNum+=1
         self.tour=self.myTurn()
