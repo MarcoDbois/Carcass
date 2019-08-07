@@ -8,8 +8,7 @@ class Square() :
         self.tuile=tuile
         self.rot=rot
         self.cardZones=[CardZone(tuile.ref,"F",z) for z in tuile.calcul_cardZones(rot)]
-        for z in self.cardZones:
-            print(z.to_str())
+        
         self.edges=tuile.calcul_edges(self.rot)
         
     def to_str(self):

@@ -74,12 +74,9 @@ class CarcassGame():
                 placable=False                            
             else:
                 newSqZone=[z for z in newSquare.cardZones for a in z.edges if a==p[1]]
-                for k,z in self.woods.items(): 
-                    if k.cardId==p[0].tuileRef:
-                        print("hi")
-                        for e in k.edges:
-                            if e==(p[1]+2)%4:
-                                zones.append((k,newSqZone[0]))
+                k=[z for z in p[0].cardZones for i in z.edges if i==(p[1]+2)%4]
+                zones.append((k[0],newSqZone[0]))
+              
                         
                 voisins.remove((p[1],p[0].position))
                                 
