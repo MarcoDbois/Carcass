@@ -13,6 +13,7 @@ class Client(ConnectionListener,Carcass):
         self.running=False
         
         Carcass.__init__(self)
+        self.carcassGames=[]
         
         self.Connect((host, port))
         

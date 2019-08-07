@@ -40,26 +40,21 @@ class CarcassServer(Server):
         if self.queue==None :
             self.currentIndex+=1
             self.queue=Game(self.currentIndex)
-            self.queue.addPlayer(channel)
-         
-        else:
-            print("hi")
+        
+        self.queue.addPlayer(channel)
             
-            
-            self.queue.addPlayer(channel)
-            l=len(self.queue.players)
-            print(self.queue.players)
+        print(self.queue.players)
                 
-            if l==self.queue.nbPlayers:
+        if len(self.queue.players)==self.queue.nbPlayers:
                
-                players=[p.id for p in self.queue.players]
-                print(players)
+            players=[p.id for p in self.queue.players]
                 
-                for p in self.queue.players:
-                    p.Send({"action": "initial", "init": self.queue.stack, "players": players, "gameId":self.queue.gameId})
-                self.games.append(self.queue) 
-                self.queue.printGame()
-                self.queue=None   
+                
+            for p in self.queue.players:
+                p.Send({"action": "initial", "init": self.queue.stack, "players": players, "gameId":self.queue.gameId})
+            self.games.append(self.queue) 
+            self.queue.printGame()
+            self.queue=None   
             
             
             
@@ -72,7 +67,7 @@ class CarcassServer(Server):
             sleep(0.0001)
     
     def SendToGamePlayers(self, data):
-        senderId=data['id']
+        
         gameId=data['gameId']
         [p.Send(data) for g in self.games for p in g.players if g.gameId==gameId ]
     

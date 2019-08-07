@@ -1,6 +1,6 @@
 import pygame
-import copy
-from model.tuile import Tuile
+
+#from model.tuile import Tuile
 from model.carcassGame import CarcassGame
 from params import Params
 

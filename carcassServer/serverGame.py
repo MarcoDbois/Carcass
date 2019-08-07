@@ -5,7 +5,8 @@ class Game:
         # numéro du tour
         self.turn = 1
         # stack de la partie
-        self.stack=sample([i for i in range(1,17)],4)
+        #self.stack=sample([i for i in range(1,17)],4)
+        self.stack=[2,4,8,13,3]
         #initialize the players including the one who started the game
         self.players=[]
         self.playedSquares=[]
