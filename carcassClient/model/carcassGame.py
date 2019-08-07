@@ -4,6 +4,7 @@ from model.cardZone import CardZone
 
 
 
+
 t0=Tuile(0,"tuile0.png","PFFR",[[1,2]])
                 
 t1=Tuile(1,"tuile1.png","RRPR")
@@ -54,6 +55,9 @@ class CarcassGame():
             print(k.to_str(),val)
         self.clickablePlaces=[x for x in square0.voisins()]
     
+    def playerTurn(self):
+        
+        return self.players[self.tourNum%len(self.players)-1]
     
     def tuileDep(self):
         return t0   
@@ -88,14 +92,23 @@ class CarcassGame():
                 
                 self.woods[a].append(b)
                 self.woods[b].append(a)
-                
+                conn=self.connexeWood(b, [])
+                finished=True
+                strw=""
+                for w in conn:
+                    if len(self.woods[w])!=len(w.edges):
+                        finished=False
+                    strw+=w.to_str()    
+                if finished: print(strw, "finished!", str(len(conn)*2)+" points pour le joueur "+self.playerTurn())    
              
             
             for k,v in self.woods.items():
                 val=[va.to_str() for va in v]
                 print(k.to_str(),val)
-            self.connexions=self.allConnexe()
-            print(self.connexions)
+            connexions=self.allConnexe()
+            print(connexions)
+                 
+                        
             self.squares.append(newSquare)
             self.clickablePlaces.remove(newSquare.position)
             self.clickablePlaces.extend([voisin[1] for voisin in voisins])
@@ -119,7 +132,8 @@ class CarcassGame():
                 cx=self.connexeWood(n,[])
                 conn.extend(cx)
                 connexions.append(self.connexeWood(n, []))  
-        return connexions    
+        return connexions  
+      
     def nextTurn(self):
         self.tourNum+=1
         self.tour=self.myTurn()

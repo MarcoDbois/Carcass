@@ -71,7 +71,7 @@ class Carcass():
                     try: pos=self.inClickableRects(event.pos[0], event.pos[1])
                     except NameError: pos = None
                     if pos is not None:        
-                        self.play(pos)
+                        self.play(pos,self.game.tourNum)
                        
         pygame.display.flip()
         self.clock.tick(60)

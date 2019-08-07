@@ -32,8 +32,8 @@ class Client(ConnectionListener,Carcass):
     
 
     
-    def play(self,pos):
-        connection.Send({"action": "play", "point": pos,"rotation": self.rotTuileToplace,"gameId":self.gameId})
+    def play(self,pos,tour):
+        connection.Send({"action": "play","tour":tour, "point": pos,"rotation": self.rotTuileToplace,"gameId":self.gameId})
     
     ###############################
     ### Network event callbacks ###
