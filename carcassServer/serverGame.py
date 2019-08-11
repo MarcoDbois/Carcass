@@ -6,7 +6,7 @@ class Game:
         self.turn = 1
         # stack de la partie
         #self.stack=sample([i for i in range(1,17)],4)
-        self.stack=[2,4,8,13,3]
+        self.stack=[1,2,3,5]
         #initialize the players including the one who started the game
         self.players=[]
         self.playedSquares=[]

@@ -1,10 +1,12 @@
+from model.cardZone import CardZone
+
 class Tuile(): 
-    def __init__(self,ref,jpg,edges,woods=[]):
+    def __init__(self,ref,jpg,edges,cardZones=[]):
         self.ref=ref
         self.jpg=jpg
         self.edges=edges
-        self.czones=woods
-   
+        self.czones=cardZones
+        
     def calcul_edges(self,rotation):
         edgesCase=[]
         for i in range(4):
@@ -13,14 +15,24 @@ class Tuile():
     
     #[[(1,0),(2,0)]]
     def calcul_cardZones(self,rotation):
-        zones=[[(x-rotation)%4 for x in cz] for cz in self.czones]
-        #for cz in self.czones:
-        #    zlist=[]
-        #    for x in cz:
-        #        zlist.append((x-rotation)%4)
-        #    zones.append(zlist)
-        return zones
-    
-                   
+        zones=[]
+        for cz in self.czones:
+            if "fishs" in cz:
+                fishs=cz["fishs"]
+            else:
+                fishs=0
+            d=CardZone(self.ref,cz["type"],[self.rotationCardZone(x,y,rotation) for x,y in cz["edges"]],fishs)
             
+            zones.append(d)
+        
+        return zones
+   
+    def rotationCardZone(self,x,y,rotation):   
+        xd, yd=x, y
+        if yd%2!=0:
+            for i in range(rotation):
+                yd =(yd+2)%4 if xd%2==0 else yd     
+                xd=(xd-1)%4
+        return ((x-rotation)%4,yd)          
+    
             

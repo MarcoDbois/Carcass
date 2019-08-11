@@ -7,8 +7,23 @@ class Square() :
         self.tuileRef=tuile.ref
         self.tuile=tuile
         self.rot=rot
-        self.cardZones=[CardZone(tuile.ref,"F",z) for z in tuile.calcul_cardZones(rot)]
-        
+        self.cardZones=tuile.calcul_cardZones(rot)
+        self.graphCZ={}
+        for z in self.cardZones:
+            if z.type!="L":
+                self.graphCZ[z]=[]
+                if z.type=="R":
+                    for l in self.cardZones:
+                        if l.type=="L":
+                            for x,y in z.edges:
+                                for a,b in l.edges:
+                                    if x==a and y==b:
+                                        self.graphCZ[z].append(l)
+                                        if l in self.graphCZ:
+                                            self.graphCZ[l].append(z)
+                                        else:
+                                            self.graphCZ[l]=[z] 
+                    
         self.edges=tuile.calcul_edges(self.rot)
         
     def to_str(self):
